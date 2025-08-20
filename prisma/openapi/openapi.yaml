@@ -1,0 +1,165 @@
+openapi: 3.1.0
+info:
+  title: Prisma API
+  description: API documentation for Airbnb backend
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /listings:
+    get:
+      summary: Get all listings
+      operationId: getListings
+      responses:
+        '200':
+          description: List of listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+
+  /reservations:
+    get:
+      summary: Get all reservations
+      operationId: getReservations
+      responses:
+        '200':
+          description: List of reservations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reservation"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          $ref: "#/components/schemas/Role"
+        listings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Listing"
+        reservations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reservation"
+      required: [id, name, email, password, role]
+
+    Listing:
+      type: object
+      properties:
+        id:
+          type: string
+        ownerId:
+          type: string
+        owner:
+          $ref: "#/components/schemas/User"
+        title:
+          type: string
+        description:
+          type: string
+        pricePerNight:
+          type: integer
+          format: int32
+        location:
+          type: string
+        photos:
+          type: string
+        amenities:
+          type: string
+        category:
+          type: string
+        maxGuests:
+          type: integer
+          format: int32
+        reservations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reservation"
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, ownerId, title, description, pricePerNight, location, createdAt]
+
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+        listingId:
+          type: string
+        listing:
+          $ref: "#/components/schemas/Listing"
+        checkIn:
+          type: string
+          format: date-time
+        checkOut:
+          type: string
+          format: date-time
+        guests:
+          type: integer
+          format: int32
+        totalPrice:
+          type: integer
+          format: int32
+        status:
+          $ref: "#/components/schemas/ReservationStatus"
+      required: [id, userId, listingId, checkIn, checkOut, guests, totalPrice, status]
+
+    Role:
+      type: string
+      enum: [GUEST, HOST]
+
+    ReservationStatus:
+      type: string
+      enum: [CONFIRMED, CANCELLED]

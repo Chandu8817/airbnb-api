@@ -1,5 +1,5 @@
 import app from "./app";
-import { swaggerDocs } from "./config/swagger";
+import swaggerDocs from "./config/swagger";
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
