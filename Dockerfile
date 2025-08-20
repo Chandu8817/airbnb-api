@@ -16,5 +16,5 @@ RUN npx prisma migrate
 
 RUN npm run build
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
 
